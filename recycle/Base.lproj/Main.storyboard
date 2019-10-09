@@ -63,14 +63,23 @@
                     <view key="view" contentMode="scaleToFill" id="p4c-S1-fc7">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="cLC-rl-OpJ">
+                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </mapView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Laq-ED-FTe"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="map_icon" id="aPf-py-Cg8" userLabel="Map"/>
+                    <connections>
+                        <outlet property="mapView" destination="cLC-rl-OpJ" id="lYk-90-uRC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WYf-pw-hPl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1804" y="1354"/>
+            <point key="canvasLocation" x="1802.8985507246377" y="1353.3482142857142"/>
         </scene>
         <!--Wallet-->
         <scene sceneID="Kmo-iA-JNY">
