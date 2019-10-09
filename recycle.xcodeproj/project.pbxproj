@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA2E6F2E234E44A9003AC4D1 /* CoinTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E6F2D234E44A9003AC4D1 /* CoinTableCell.swift */; };
+		FA2E6F30234E4D77003AC4D1 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E6F2F234E4D77003AC4D1 /* Coin.swift */; };
 		FA6216EF234D59890048C995 /* Artwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6216EE234D59890048C995 /* Artwork.swift */; };
 		FAACEE81234A6D2E00989E3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACEE80234A6D2E00989E3E /* AppDelegate.swift */; };
 		FAACEE83234A6D2E00989E3E /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACEE82234A6D2E00989E3E /* FirstViewController.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA2E6F2D234E44A9003AC4D1 /* CoinTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinTableCell.swift; sourceTree = "<group>"; };
+		FA2E6F2F234E4D77003AC4D1 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		FA6216EE234D59890048C995 /* Artwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artwork.swift; sourceTree = "<group>"; };
 		FAACEE7D234A6D2E00989E3E /* recycle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = recycle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAACEE80234A6D2E00989E3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -75,9 +79,11 @@
 				FAACEE8E234A6D2E00989E3E /* Info.plist */,
 				FAACEE96234A719500989E3E /* ProfileViewController.swift */,
 				FAACEE98234A776900989E3E /* MapViewController.swift */,
+				FA6216EE234D59890048C995 /* Artwork.swift */,
 				FAACEE9A234A780B00989E3E /* HistoryViewController.swift */,
 				FAACEE9C234A80AB00989E3E /* WalletViewController.swift */,
-				FA6216EE234D59890048C995 /* Artwork.swift */,
+				FA2E6F2D234E44A9003AC4D1 /* CoinTableCell.swift */,
+				FA2E6F2F234E4D77003AC4D1 /* Coin.swift */,
 			);
 			path = recycle;
 			sourceTree = "<group>";
@@ -157,9 +163,11 @@
 				FAACEE81234A6D2E00989E3E /* AppDelegate.swift in Sources */,
 				FA6216EF234D59890048C995 /* Artwork.swift in Sources */,
 				FAACEE9D234A80AB00989E3E /* WalletViewController.swift in Sources */,
+				FA2E6F2E234E44A9003AC4D1 /* CoinTableCell.swift in Sources */,
 				FAACEE97234A719500989E3E /* ProfileViewController.swift in Sources */,
 				FAACEE9B234A780B00989E3E /* HistoryViewController.swift in Sources */,
 				FAACEE99234A776900989E3E /* MapViewController.swift in Sources */,
+				FA2E6F30234E4D77003AC4D1 /* Coin.swift in Sources */,
 				FAACEE83234A6D2E00989E3E /* FirstViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,6 +316,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = FFNLL9CBET;
 				INFOPLIST_FILE = recycle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -328,6 +337,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = FFNLL9CBET;
 				INFOPLIST_FILE = recycle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

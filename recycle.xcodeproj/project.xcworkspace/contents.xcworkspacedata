@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:tab10.xcodeproj">
+      location = "self:/Users/toruishihara/git/recycle/recycle.xcodeproj">
    </FileRef>
 </Workspace>
