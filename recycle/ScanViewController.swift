@@ -6,19 +6,6 @@
 //  Copyright © 2019 nariuchi. All rights reserved.
 //
 
-/*
-import UIKit
-
-class ScanViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "scan")!)
-    }
-}
- */
-
 import AVFoundation
 import UIKit
 
@@ -26,12 +13,57 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
     var coinView: UIView!
+    var label1:UILabel!
+    var shapeLayer1:CAShapeLayer!
+    var timer: Timer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = UIColor.white
+        coinView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        coinView.backgroundColor = UIColor(patternImage: UIImage(named: "coin")!)
 
-        view.backgroundColor = UIColor.black
         captureSession = AVCaptureSession()
+        setPreviewLayer()
+        startCaptureSession()
+    }
+    
+    func setPreviewLayer() {
+        let w = self.view.frame.width
+        let h = self.view.frame.height
+
+        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+
+        previewLayer.frame = CGRect(x: (w-200)/2, y: (w-200)/2, width: 200, height: 200)
+        previewLayer.videoGravity = .resizeAspectFill
+        
+        let path1 = UIBezierPath()
+        let near = w/2 - 110
+        let far = w/2 + 110
+        path1.move(to: CGPoint(x: near-2, y: near))
+        path1.addLine(to: CGPoint(x: far, y: near))
+        path1.addLine(to: CGPoint(x: far, y: far))
+        path1.addLine(to: CGPoint(x: near, y: far))
+        path1.addLine(to: CGPoint(x: near, y: near-2))
+        shapeLayer1 = CAShapeLayer()
+        shapeLayer1.path = path1.cgPath
+        shapeLayer1.fillColor = UIColor.clear.cgColor
+        shapeLayer1.strokeColor = UIColor.darkGray.cgColor
+        shapeLayer1.lineDashPattern = [57, 110, 110, 110, 110, 110, 110, 110, 110, 110]
+        shapeLayer1.lineWidth = 4.0
+
+        label1 = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: 21))
+        label1.center = CGPoint(x: w/2, y: far + 30)
+        label1.textAlignment = .center
+        label1.textColor = UIColor.black
+        label1.text = "Scan QR-Code on the recycle box"
+    }
+    
+    func startCaptureSession() {
+        view.layer.addSublayer(shapeLayer1)
+        view.layer.addSublayer(previewLayer)
+        self.view.addSubview(label1)
 
         guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else { return }
         let videoInput: AVCaptureDeviceInput
@@ -60,23 +92,15 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             failed()
             return
         }
-
-        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.frame = view.layer.bounds
-        previewLayer.videoGravity = .resizeAspectFill
-        view.layer.addSublayer(previewLayer)
-
-        coinView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
-        coinView.backgroundColor = UIColor(patternImage: UIImage(named: "coin")!)
-
         captureSession.startRunning()
     }
 
     func failed() {
-        let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
-        captureSession = nil
+        //let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
+        //ac.addAction(UIAlertAction(title: "OK", style: .default))
+        //present(ac, animated: true)
+        print("failed")
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -111,14 +135,29 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     func found(code: String) {
         print(code)
         previewLayer.removeFromSuperlayer()
+        shapeLayer1.removeFromSuperlayer()
+        label1.removeFromSuperview()
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "scan")!)
         
-        self.coinView.removeFromSuperview()
+        timer = Timer.scheduledTimer(timeInterval: 7.0, target: self, selector: #selector(nextScan), userInfo: nil, repeats: false)
+
         self.view.addSubview(self.coinView)
         self.coinView.center = self.view.center
         UIView.animate(withDuration: 2.0, delay: 0.0, options: .autoreverse, animations: {
             self.coinView.center.y += 200.0
         }, completion: nil)
+    }
+
+    @objc func nextScan()
+    {
+        print("nextScan")
+        self.coinView.removeFromSuperview()
+        view.backgroundColor = UIColor.white
+        captureSession = AVCaptureSession()
+        setPreviewLayer()
+        startCaptureSession()
+
+        print("nextScan end")
     }
 
     override var prefersStatusBarHidden: Bool {

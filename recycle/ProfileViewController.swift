@@ -18,8 +18,8 @@ class ProfileViewController: UIViewController {
         let face_y:CGFloat = 0.05
         let circle_y:CGFloat = 0.72
         
-        let topColor = UIColor(red:0.54, green:0.90, blue:0.74, alpha:1)
-        let bottomColor = UIColor(red:0.07, green:0.13, blue:0.26, alpha:1)
+        let topColor = UIColor(red:80/255, green:215/255, blue:155/255, alpha:1)
+        let bottomColor = UIColor(red:67/255, green:139/255, blue:185/255, alpha:1)
         let gradientColors: [CGColor] = [topColor.cgColor, bottomColor.cgColor]
         let gradientLayer: CAGradientLayer = CAGradientLayer()
         gradientLayer.colors = gradientColors

@@ -16,6 +16,14 @@ class HistoryViewController: UIViewController {
         let w = self.view.frame.width
         let h = self.view.frame.height
 
+        let gv = GraphView(frame: CGRect(x: 50, y: 50, width: w-100, height: w-100))
+        view.addSubview(gv)
+
+        
+        /*
+        let w = self.view.frame.width
+        let h = self.view.frame.height
+
         let base_y = 0.6*h
         let base_x = 0.1*w
         let graph_w = 0.8*w
@@ -80,6 +88,7 @@ class HistoryViewController: UIViewController {
         label2.lineBreakMode = .byTruncatingTail
         label2.text = "You are,\n\nIn your neighbor 27/89\nIn your city 1,733/3,211\nIn your country 391,182/730,199\nIn the world 14,573,124/23,001,325"
         self.view.addSubview(label2)
+ */
 
 
     }
