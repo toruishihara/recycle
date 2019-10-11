@@ -16,9 +16,30 @@ class HistoryViewController: UIViewController {
         let w = self.view.frame.width
         let h = self.view.frame.height
 
+        let topColor = UIColor(red:128/255, green:128/255, blue:128/255, alpha:1)
+        let bottomColor = UIColor(red:200/255, green:200/255, blue:200/255, alpha:1)
+        let gradientColors: [CGColor] = [topColor.cgColor, bottomColor.cgColor]
+        let gradientLayer: CAGradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientColors
+        gradientLayer.frame = CGRect(x:0, y:0, width:w, height:h)
+        self.view.layer.insertSublayer(gradientLayer, at: 0)
+
         let gv = GraphView(frame: CGRect(x: 50, y: 50, width: w-100, height: w-100))
         view.addSubview(gv)
 
+        let label0 = UILabel(frame: CGRect(x: 30, y: 0, width: w - 60, height: 30))
+        label0.center = CGPoint(x: w/2 , y: w + 10)
+        label0.textAlignment = .center
+        label0.textColor = UIColor.black
+        label0.font = UIFont.boldSystemFont(ofSize: 20.0)
+        label0.text = "Available Coin:             12 Coins"
+        
+        let gradientColors2: [CGColor] = [bottomColor.cgColor, topColor.cgColor]
+        let gradientLayer2: CAGradientLayer = CAGradientLayer()
+        gradientLayer2.colors = gradientColors2
+        gradientLayer2.frame = label0.frame
+        self.view.layer.insertSublayer(gradientLayer2, at:1)
+        self.view.addSubview(label0)
         
         /*
         let w = self.view.frame.width
