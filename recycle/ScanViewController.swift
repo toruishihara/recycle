@@ -12,7 +12,7 @@ import UIKit
 class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
-    var coinView: UIView!
+    var coinView: UIImageView!
     var label1:UILabel!
     var shapeLayer1:CAShapeLayer!
     var timer: Timer!
@@ -21,8 +21,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.white
-        coinView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
-        coinView.backgroundColor = UIColor(patternImage: UIImage(named: "coin")!)
 
         captureSession = AVCaptureSession()
         setPreviewLayer()
@@ -61,6 +59,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     }
     
     func startCaptureSession() {
+        coinView = UIImageView(image: UIImage(named: String(format: "coin%d", Int.random(in: 1..<8))))
+        coinView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+            
         view.layer.addSublayer(shapeLayer1)
         view.layer.addSublayer(previewLayer)
         self.view.addSubview(label1)

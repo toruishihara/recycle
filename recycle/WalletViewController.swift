@@ -48,7 +48,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 1
-        print("numberOfRowsInSection")
+        //print("numberOfRowsInSection")
         return coins.count
     }
     
@@ -65,6 +65,12 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         return 100
     }
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("section: \(indexPath.section)")
+        //print("row: \(indexPath.row)")
+        let nextVC = FirstViewController()
+        self.present(nextVC, animated: true, completion: nil)
+    }
     //MARK: Private Methods
 
     private func loadSampleCoins() {
