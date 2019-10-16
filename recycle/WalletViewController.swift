@@ -56,7 +56,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CoinTableCell
         cell.backgroundColor = UIColor.white
         cell.coinImage.image = coins[indexPath.row].photo
-        cell.coinLabel.text = String(format: "x %d", coins[indexPath.row].num)
+        cell.coinLabel.text = String(format: "x %d [SHOP]", coins[indexPath.row].num)
         
         return cell
     }

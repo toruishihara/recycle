@@ -16,6 +16,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     var label1:UILabel!
     var shapeLayer1:CAShapeLayer!
     var timer: Timer!
+    var coinNo: Int!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,8 +60,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     }
     
     func startCaptureSession() {
-        coinView = UIImageView(image: UIImage(named: String(format: "coin%d", Int.random(in: 1..<8))))
-        coinView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        coinNo = Int.random(in: 1..<8)
+        coinView = UIImageView(image: UIImage(named: String(format: "coin%d", coinNo)))
+        coinView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
             
         view.layer.addSublayer(shapeLayer1)
         view.layer.addSublayer(previewLayer)
@@ -138,7 +140,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         previewLayer.removeFromSuperlayer()
         shapeLayer1.removeFromSuperlayer()
         label1.removeFromSuperview()
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "scan")!)
+        if (coinNo == 5) {
+            self.view.backgroundColor = UIColor(patternImage: UIImage(named: "firework")!)
+        }
+
         
         timer = Timer.scheduledTimer(timeInterval: 7.0, target: self, selector: #selector(nextScan), userInfo: nil, repeats: false)
 
