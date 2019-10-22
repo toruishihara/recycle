@@ -1,5 +1,5 @@
 //
-//  FirstViewController.swift
+//  ShopViewController.swift
 //  tab10
 //
 //  Created by TORU ISHIHARA on 10/6/19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FirstViewController: UIViewController {
+class ShopViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

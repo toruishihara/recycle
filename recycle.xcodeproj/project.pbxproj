@@ -11,7 +11,7 @@
 		FA2E6F30234E4D77003AC4D1 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2E6F2F234E4D77003AC4D1 /* Coin.swift */; };
 		FA6216EF234D59890048C995 /* Artwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6216EE234D59890048C995 /* Artwork.swift */; };
 		FAACEE81234A6D2E00989E3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACEE80234A6D2E00989E3E /* AppDelegate.swift */; };
-		FAACEE83234A6D2E00989E3E /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACEE82234A6D2E00989E3E /* FirstViewController.swift */; };
+		FAACEE83234A6D2E00989E3E /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACEE82234A6D2E00989E3E /* ShopViewController.swift */; };
 		FAACEE85234A6D2E00989E3E /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAACEE84234A6D2E00989E3E /* ScanViewController.swift */; };
 		FAACEE88234A6D2E00989E3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAACEE86234A6D2E00989E3E /* Main.storyboard */; };
 		FAACEE8A234A6D2E00989E3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAACEE89234A6D2E00989E3E /* Assets.xcassets */; };
@@ -29,7 +29,7 @@
 		FA6216EE234D59890048C995 /* Artwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artwork.swift; sourceTree = "<group>"; };
 		FAACEE7D234A6D2E00989E3E /* recycle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = recycle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAACEE80234A6D2E00989E3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FAACEE82234A6D2E00989E3E /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		FAACEE82234A6D2E00989E3E /* ShopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewController.swift; sourceTree = "<group>"; };
 		FAACEE84234A6D2E00989E3E /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		FAACEE87234A6D2E00989E3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FAACEE89234A6D2E00989E3E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				FAACEE80234A6D2E00989E3E /* AppDelegate.swift */,
-				FAACEE82234A6D2E00989E3E /* FirstViewController.swift */,
+				FAACEE82234A6D2E00989E3E /* ShopViewController.swift */,
 				FAACEE84234A6D2E00989E3E /* ScanViewController.swift */,
 				FAACEE86234A6D2E00989E3E /* Main.storyboard */,
 				FAACEE89234A6D2E00989E3E /* Assets.xcassets */,
@@ -172,7 +172,7 @@
 				FAACEE9B234A780B00989E3E /* HistoryViewController.swift in Sources */,
 				FAACEE99234A776900989E3E /* MapViewController.swift in Sources */,
 				FA2E6F30234E4D77003AC4D1 /* Coin.swift in Sources */,
-				FAACEE83234A6D2E00989E3E /* FirstViewController.swift in Sources */,
+				FAACEE83234A6D2E00989E3E /* ShopViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

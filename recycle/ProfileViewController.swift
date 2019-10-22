@@ -12,6 +12,16 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    func queryBalance() {
+        
+    }
+    
+    func draw() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let username = appDelegate.username
+
         //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "profile")!)
         let w = self.view.frame.width
         let h = self.view.frame.height
@@ -135,5 +145,38 @@ class ProfileViewController: UIViewController {
 
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let userName = UserDefaults.standard.string(forKey: "username")
+
+        if (userName == nil) {
+            showAlertWithTextField()
+        } else {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.username = userName
+        }
+    }
+    
+    func showAlertWithTextField() {
+        let alertController = UIAlertController(title: "Username", message: nil, preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "Login", style: .default) { (_) in
+            if let txtField = alertController.textFields?.first, let text = txtField.text {
+                // operations
+                print("Text==>" + text)
+                UserDefaults.standard.set(text, forKey: "username")
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.username = text
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Login"
+        }
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+
     
 }
