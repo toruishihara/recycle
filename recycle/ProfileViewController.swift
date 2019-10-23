@@ -9,19 +9,14 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-    
+    var app: AppDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    func queryBalance() {
-        
+        app = (UIApplication.shared.delegate as! AppDelegate)
+        app!.username = UserDefaults.standard.string(forKey: "username")
     }
     
     func draw() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let username = appDelegate.username
-
         //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "profile")!)
         let w = self.view.frame.width
         let h = self.view.frame.height
@@ -47,7 +42,7 @@ class ProfileViewController: UIViewController {
         label0.textAlignment = .center
         label0.textColor = UIColor.white
         label0.font = UIFont.boldSystemFont(ofSize: 30.0)
-        label0.text = "John Void"
+        label0.text = app!.username
         self.view.addSubview(label0)
         
         let label1 = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: 21))
@@ -148,18 +143,16 @@ class ProfileViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let userName = UserDefaults.standard.string(forKey: "username")
 
-        if (userName == nil) {
+        if (app!.username == nil) {
             showAlertWithTextField()
         } else {
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.username = userName
+            draw()
         }
     }
     
     func showAlertWithTextField() {
-        let alertController = UIAlertController(title: "Username", message: nil, preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Login", message: nil, preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: "Login", style: .default) { (_) in
             if let txtField = alertController.textFields?.first, let text = txtField.text {
                 // operations
@@ -175,6 +168,7 @@ class ProfileViewController: UIViewController {
         }
         alertController.addAction(confirmAction)
         alertController.addAction(cancelAction)
+        
         self.present(alertController, animated: true, completion: nil)
     }
 

@@ -40,9 +40,11 @@ class Coin {
         ret += "  \"owner\": \"resource:com.alchemistmaterial.test.ProgramParticipant#\(owner)\","
         ret += "  \"coinType\": \"\(coinType!)\","
         ret += "  \"value\": \"\(value!)\","
+        ret += "  \"coinState\": \"\(coinState!)\","
         ret += "  \"coinSponsorId\": \"\(coinSponsorId!)\","
-        ret += "  \"coinDesignId\": \"\(coinDesignId!)\","
+        ret += "  \"coinDesignId\": \"\(coinDesignId!)\""
         ret += "}"
+        print(ret)
         return ret
     }
 }

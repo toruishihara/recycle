@@ -35,11 +35,20 @@ class CoinTableCell: UITableViewCell {
 
     
     let coinLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 100, y: 50, width: 300, height: 50))
+        let label = UILabel(frame: CGRect(x: 100, y: 0, width: 200, height: 50))
         label.textColor = UIColor.black
         label.font = UIFont.boldSystemFont(ofSize: 32)
         //label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+
+    let coinLabel2: UILabel = {
+        let label2 = UILabel(frame: CGRect(x: 200, y: 30, width: 150, height:40))
+        label2.textColor = UIColor.black
+        label2.font = UIFont.boldSystemFont(ofSize: 16)
+        label2.backgroundColor = .lightGray
+        //label.translatesAutoresizingMaskIntoConstraints = false
+        return label2
     }()
 
     func setupView() {
@@ -47,6 +56,7 @@ class CoinTableCell: UITableViewCell {
         addSubview(cellView)
         cellView.addSubview(coinImage)
         cellView.addSubview(coinLabel)
+        cellView.addSubview(coinLabel2)
         self.selectionStyle = .none
         
         

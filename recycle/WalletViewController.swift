@@ -11,7 +11,8 @@ import UIKit
 class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewDataSource {
     
     //MARK: Properties
-    
+    var app: AppDelegate?
+
     var coinsInWallet = [CoinInWallet]()
     var coins = [Coin]()
     
@@ -24,13 +25,21 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        app = (UIApplication.shared.delegate as! AppDelegate)
         print("WalletViewController viewDidLoad")
 
         loadSampleCoins()
-
-//        var str:String? ="[{\"$class\":\"com.alchemistmaterial.test.AlchemistCoin\",\"coinId\":\"Coin11\",\"owner\":\"resource:com.alchemistmaterial.test.ProgramParticipant#USER01\",\"coinType\":\"COMMON\",\"value\":\"1\",\"coinState\":\"OUTSTANDING\",\"coinSponsorId\":\"Cold-Cola\",\"coinDesignId\":\"D01\"},{\"$class\":\"com.alchemistmaterial.test.AlchemistCoin\",\"coinId\":\"Coin12\",\"owner\":\"resource:com.alchemistmaterial.test.ProgramParticipant#USER03\",\"coinType\":\"SPECIAL\",\"value\":\"1\",\"coinState\":\"OUTSTANDING\",\"coinSponsorId\":\"Kanagawa Stadium\",\"coinDesignId\":\"D02\"}]"
-
+        refreshTable()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+    }
+    
+    func refreshTable() {
+        coins = [Coin]()
+        for i in coinsInWallet {
+            i.num = 0
+        }
         let url = URL(string: "http://35.227.185.35:3000/api/com.alchemistmaterial.test.AlchemistCoin")!
 
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
@@ -43,12 +52,12 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
                         let coin = Coin(json: i)
                         self.coins += [coin!]
                         let owner = i["owner"] as! String?
-                        if (owner!.hasSuffix("USER01")) {
+                        if (owner! == self.app!.username) {
                             let design = i["coinDesignId"] as! String?
                             //print(i)
                             for j in self.coinsInWallet {
-                                print(j.name)
-                                print(design!)
+                                //print(j.name)
+                                //print(design!)
                                 if (design!.compare(j.name) == .orderedSame) {
                                     j.num += 1
                                 }
@@ -63,6 +72,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
             }
             
             DispatchQueue.main.async {
+                print("calling setupTableView")
                 self.setupTableView()
             }
         }
@@ -95,8 +105,23 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CoinTableCell
         cell.backgroundColor = UIColor.white
-        cell.coinImage.image = coinsInWallet[indexPath.row].photo
-        cell.coinLabel.text = String(format: "x %d", coinsInWallet[indexPath.row].num)
+        print("index=\(indexPath.row)")
+        if (indexPath.row < coinsInWallet.count) {
+            cell.coinImage.image = coinsInWallet[indexPath.row].photo
+            cell.coinLabel.text = String(format: "x %d", coinsInWallet[indexPath.row].num)
+            if (coinsInWallet[indexPath.row].num > 0) {
+                if (self.app!.username == "USER01") {
+                    cell.coinLabel2.text = "Send to USER02"
+                } else {
+                    cell.coinLabel2.text = "Send to USER01"
+                }
+            } else {
+                cell.coinLabel2.backgroundColor = .white
+            }
+        } else {
+            print("No image, label")
+        }
+        
         
         return cell
     }
@@ -105,6 +130,52 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         return 100
     }
 
+    func httpPut(coin:Coin) {
+        let url = NSURL(string: "http://35.227.185.35:3000/api/com.alchemistmaterial.test.AlchemistCoin/" + coin.coinId) //Remember to put ATS exception if the URL is not https
+        let request = NSMutableURLRequest(url: url! as URL)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type") //Optional
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.httpBody = coin.GetJson().data(using: .utf8)
+
+        request.httpMethod = "PUT"
+        let session = URLSession(configuration:URLSessionConfiguration.default, delegate: nil, delegateQueue: nil)
+
+        var msg:String = ""
+        let dataTask = session.dataTask(with: request as URLRequest) { (data, response, error) -> Void in
+            if error != nil {
+                msg = error!.localizedDescription
+            }
+            else {
+                let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
+                print("Parsed JSON: '\(jsonStr ?? "none")'")
+                msg = "Sent to \(coin.owner)"
+            }
+            self.showAlert(msg: msg)
+        }
+        dataTask.resume()
+    }
+
+    func showAlert(msg:String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "", message: msg, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                switch action.style{
+                case .default:
+                    print("default")
+
+                case .cancel:
+                    print("cancel")
+
+                case .destructive:
+                    print("destructive")
+
+                default:
+                    print("alert default")
+                }}))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("section: \(indexPath.section)")
         //print("row: \(indexPath.row)")
@@ -113,48 +184,22 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         var coin:Coin?
         
         for i in coins {
-            if (i.owner == "USER01") {
+            if (i.owner == app!.username) {
                 coin = i
+                if (app!.username == "USER01") {
+                    coin!.owner = "USER02"
+                } else {
+                    coin!.owner = "USER01"
+                }
                 break
             }
         }
         if (coin == nil) {
+            print("No Coin Found")
             return
         }
-        
-        let url = NSURL(string: "http://35.227.185.35:3000/api/com.alchemistmaterial.test.AlchemistCoin/" + coin!.coinId)
-
-        let request = NSMutableURLRequest(url: url! as URL)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.httpBody = coin!.GetJson().data(using: .utf8)
-        
-        //create the session object
-        let session = URLSession.shared
-
-        //create dataTask using the session object to send data to the server
-        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-
-            guard error == nil else {
-                return
-            }
-
-            guard let data = data else {
-                return
-            }
-
-            do {
-                //create json object from data
-                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    print(json)
-                    // handle json...
-                }
-            } catch let error {
-                print(error.localizedDescription)
-            }
-        })
-        task.resume()
+        httpPut(coin:coin!)
+        return
     }
     //MARK: Private Methods
 
@@ -163,13 +208,19 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         let photo2 = UIImage(named: "D02")
         let photo3 = UIImage(named: "D03")
         let photo4 = UIImage(named: "D04")
+        let photo5 = UIImage(named: "D05")
+        let photo6 = UIImage(named: "D06")
+        let photo7 = UIImage(named: "D07")
 
         let coin1 = CoinInWallet(name: "D01", photo: photo1, num: 0)
         let coin2 = CoinInWallet(name: "D02", photo: photo2, num: 0)
         let coin3 = CoinInWallet(name: "D03", photo: photo3, num: 0)
         let coin4 = CoinInWallet(name: "D04", photo: photo4, num: 0)
+        let coin5 = CoinInWallet(name: "D05", photo: photo5, num: 0)
+        let coin6 = CoinInWallet(name: "D06", photo: photo6, num: 0)
+        let coin7 = CoinInWallet(name: "D07", photo: photo7, num: 0)
 
-        coinsInWallet += [coin1!, coin2!, coin3!, coin4!]
+        coinsInWallet += [coin1!, coin2!, coin3!, coin4!, coin5!, coin6!, coin7!]
     }
 }
 
