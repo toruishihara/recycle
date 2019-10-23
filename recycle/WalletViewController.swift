@@ -18,7 +18,8 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     
     let tableview: UITableView = {
         let tv = UITableView()
-        tv.backgroundColor = UIColor.white
+        tv.backgroundColor = .white
+        tv.separatorColor = .clear
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
@@ -29,10 +30,16 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         print("WalletViewController viewDidLoad")
 
         loadSampleCoins()
-        refreshTable()
+        //refreshTable()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("viewWillApear")
+        refreshTable()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print("viewDidAppear")
     }
     
     func refreshTable() {
@@ -41,7 +48,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
             i.num = 0
         }
         let url = URL(string: "http://35.227.185.35:3000/api/com.alchemistmaterial.test.AlchemistCoin")!
-
+        print("Get all coins from server")
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             guard let data = data else { return }
             do {
@@ -49,16 +56,15 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
                 {
                     //print(jsonArray) // use the json here
                     for i in jsonArray{
+                        //print(i)
                         let coin = Coin(json: i)
                         self.coins += [coin!]
                         let owner = i["owner"] as! String?
-                        if (owner! == self.app!.username) {
+                        if ((owner != nil) && owner!.hasSuffix(self.app!.username!)) {
                             let design = i["coinDesignId"] as! String?
-                            //print(i)
+                            
                             for j in self.coinsInWallet {
-                                //print(j.name)
-                                //print(design!)
-                                if (design!.compare(j.name) == .orderedSame) {
+                                if (design! == j.name) {
                                     j.num += 1
                                 }
                             }
@@ -108,6 +114,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         print("index=\(indexPath.row)")
         if (indexPath.row < coinsInWallet.count) {
             cell.coinImage.image = coinsInWallet[indexPath.row].photo
+            //cell.coinImage.backgroundColor = .lightGray
             cell.coinLabel.text = String(format: "x %d", coinsInWallet[indexPath.row].num)
             if (coinsInWallet[indexPath.row].num > 0) {
                 if (self.app!.username == "USER01") {
@@ -121,7 +128,6 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         } else {
             print("No image, label")
         }
-        
         
         return cell
     }
@@ -223,12 +229,3 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         coinsInWallet += [coin1!, coin2!, coin3!, coin4!, coin5!, coin6!, coin7!]
     }
 }
-
-/*
-extension String {
-    func toJSON() -> Any? {
-        guard let data = self.data(using: .utf8, allowLossyConversion: false) else { return nil }
-        return try? JSONSerialization.jsonObject(with: data, options: .mutableContainers)
-    }
-}
- */

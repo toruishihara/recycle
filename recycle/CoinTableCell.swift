@@ -29,13 +29,13 @@ class CoinTableCell: UITableViewCell {
     }()
     
     let coinImage: UIImageView = {
-        let view = UIImageView(frame: CGRect(x: 0, y: 0, width: 90, height: 90))
+        let view = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         return view
     }()
 
     
     let coinLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 100, y: 0, width: 200, height: 50))
+        let label = UILabel(frame: CGRect(x: 100, y: 20, width: 200, height: 50))
         label.textColor = UIColor.black
         label.font = UIFont.boldSystemFont(ofSize: 32)
         //label.translatesAutoresizingMaskIntoConstraints = false
@@ -47,6 +47,7 @@ class CoinTableCell: UITableViewCell {
         label2.textColor = UIColor.black
         label2.font = UIFont.boldSystemFont(ofSize: 16)
         label2.backgroundColor = .lightGray
+        label2.textAlignment = .center
         //label.translatesAutoresizingMaskIntoConstraints = false
         return label2
     }()
