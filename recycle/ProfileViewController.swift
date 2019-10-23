@@ -33,7 +33,11 @@ class ProfileViewController: UIViewController {
         
         var imageView : UIImageView
         imageView  = UIImageView()
-        imageView.image = UIImage(named:"face")
+        if (app!.username == "USER01") {
+            imageView.image = UIImage(named:"face01")
+        } else {
+            imageView.image = UIImage(named:"face")
+        }
         imageView.frame = CGRect(x: (w-200)/2, y: h * face_y, width: 200, height: 200)
         self.view.addSubview(imageView)
         
