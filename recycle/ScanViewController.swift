@@ -61,7 +61,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     
     func startCaptureSession() {
         coinNo = Int.random(in: 1..<8)
-        coinView = UIImageView(image: UIImage(named: String(format: "coin%d", coinNo)))
+        coinView = UIImageView(image: UIImage(named: String(format: "D%02d", coinNo)))
         coinView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
             
         view.layer.addSublayer(shapeLayer1)

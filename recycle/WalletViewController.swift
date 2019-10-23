@@ -54,7 +54,6 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
             do {
                 if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>]
                 {
-                    //print(jsonArray) // use the json here
                     for i in jsonArray{
                         //print(i)
                         let coin = Coin(json: i)
@@ -188,9 +187,10 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         //let nextVC = ShopViewController()
         //self.present(nextVC, animated: true, completion: nil)
         var coin:Coin?
+        let designId:String = String(format: "D%02d", indexPath.section+1)
         
         for i in coins {
-            if (i.owner == app!.username) {
+            if (i.owner == app!.username && i.coinDesignId == designId) {
                 coin = i
                 if (app!.username == "USER01") {
                     coin!.owner = "USER02"
