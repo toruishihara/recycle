@@ -12,6 +12,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     
     //MARK: Properties
     
+    var coinsInWallet = [CoinInWallet]()
     var coins = [Coin]()
     
     let tableview: UITableView = {
@@ -39,11 +40,13 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
                 {
                     //print(jsonArray) // use the json here
                     for i in jsonArray{
+                        let coin = Coin(json: i)
+                        self.coins += [coin!]
                         let owner = i["owner"] as! String?
                         if (owner!.hasSuffix("USER01")) {
                             let design = i["coinDesignId"] as! String?
                             //print(i)
-                            for j in self.coins {
+                            for j in self.coinsInWallet {
                                 print(j.name)
                                 print(design!)
                                 if (design!.compare(j.name) == .orderedSame) {
@@ -92,8 +95,8 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CoinTableCell
         cell.backgroundColor = UIColor.white
-        cell.coinImage.image = coins[indexPath.row].photo
-        cell.coinLabel.text = String(format: "x %d", coins[indexPath.row].num)
+        cell.coinImage.image = coinsInWallet[indexPath.row].photo
+        cell.coinLabel.text = String(format: "x %d", coinsInWallet[indexPath.row].num)
         
         return cell
     }
@@ -105,8 +108,53 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("section: \(indexPath.section)")
         //print("row: \(indexPath.row)")
-        let nextVC = ShopViewController()
-        self.present(nextVC, animated: true, completion: nil)
+        //let nextVC = ShopViewController()
+        //self.present(nextVC, animated: true, completion: nil)
+        var coin:Coin?
+        
+        for i in coins {
+            if (i.owner == "USER01") {
+                coin = i
+                break
+            }
+        }
+        if (coin == nil) {
+            return
+        }
+        
+        let url = NSURL(string: "http://35.227.185.35:3000/api/com.alchemistmaterial.test.AlchemistCoin/" + coin!.coinId)
+
+        let request = NSMutableURLRequest(url: url! as URL)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.httpBody = coin!.GetJson().data(using: .utf8)
+        
+        //create the session object
+        let session = URLSession.shared
+
+        //create dataTask using the session object to send data to the server
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+
+            guard error == nil else {
+                return
+            }
+
+            guard let data = data else {
+                return
+            }
+
+            do {
+                //create json object from data
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    print(json)
+                    // handle json...
+                }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        })
+        task.resume()
     }
     //MARK: Private Methods
 
@@ -116,15 +164,12 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         let photo3 = UIImage(named: "D03")
         let photo4 = UIImage(named: "D04")
 
-        let coin1 = Coin(name: "D01", photo: photo1, num: 0)
+        let coin1 = CoinInWallet(name: "D01", photo: photo1, num: 0)
+        let coin2 = CoinInWallet(name: "D02", photo: photo2, num: 0)
+        let coin3 = CoinInWallet(name: "D03", photo: photo3, num: 0)
+        let coin4 = CoinInWallet(name: "D04", photo: photo4, num: 0)
 
-        let coin2 = Coin(name: "D02", photo: photo2, num: 0)
-
-        let coin3 = Coin(name: "D03", photo: photo3, num: 0)
-
-        let coin4 = Coin(name: "D04", photo: photo4, num: 0)
-
-        coins += [coin1!, coin2!, coin3!, coin4!]
+        coinsInWallet += [coin1!, coin2!, coin3!, coin4!]
     }
 }
 
