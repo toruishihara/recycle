@@ -146,10 +146,10 @@ class ProfileViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-
+ 
         if (app!.username == nil) {
-            showAlertWithTextField()
+            selectUser()
+            //showAlertWithTextField()
         } else {
             draw()
         }
@@ -175,6 +175,31 @@ class ProfileViewController: UIViewController {
         
         self.present(alertController, animated: true, completion: nil)
     }
-
     
+    func setUser(user: String) {
+        UserDefaults.standard.set(user, forKey: "username")
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.username = user
+
+        self.draw()
+    }
+    
+    func selectUser() {
+        let alert = UIAlertController(title: "Title", message: "Please select User", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "USER01", style: .default, handler: { (_) in
+            self.setUser(user:"USER01")
+        }))
+
+        alert.addAction(UIAlertAction(title: "USER02", style: .default, handler: { (_) in
+            self.setUser(user:"USER02")
+        }))
+
+        alert.addAction(UIAlertAction(title: "USER03", style: .default, handler: { (_) in
+            self.setUser(user:"USER03")
+        }))
+
+        self.present(alert, animated: true, completion: {
+            print("completion block")
+        })
+    }
 }
