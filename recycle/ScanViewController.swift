@@ -30,7 +30,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     
     func setPreviewLayer() {
         let w = self.view.frame.width
-        let h = self.view.frame.height
+        //let h = self.view.frame.height
 
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
 

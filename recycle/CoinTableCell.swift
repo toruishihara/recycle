@@ -12,7 +12,7 @@ class CoinTableCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        print("Cell init \(String(describing: reuseIdentifier))")
+        //print("Cell init \(String(describing: reuseIdentifier))")
         setupView()
     }
     
@@ -53,7 +53,6 @@ class CoinTableCell: UITableViewCell {
     }()
 
     func setupView() {
-        print("setupView")
         addSubview(cellView)
         cellView.addSubview(coinImage)
         cellView.addSubview(coinLabel)

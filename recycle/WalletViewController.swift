@@ -16,6 +16,9 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     var coinsInWallet = [CoinInWallet]()
     var coins = [Coin]()
     
+    var timer: Timer!
+    var refreshing: Bool = false
+    
     let tableview: UITableView = {
         let tv = UITableView()
         tv.backgroundColor = .white
@@ -30,7 +33,8 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         print("WalletViewController viewDidLoad")
 
         loadSampleCoins()
-        //refreshTable()
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,7 +47,13 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         self.setupTableView()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        self.timer.invalidate()
+        self.timer = nil
+    }
+    
     func refreshTable() {
+        refreshing = true
         coins = [Coin]()
         for i in coinsInWallet {
             i.num = 0
@@ -51,8 +61,14 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         let url = URL(string: "http://35.227.185.35:3000/api/com.alchemistmaterial.test.AlchemistCoin")!
         print("Get all coins from server")
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            guard let data = data else { return }
+            guard let data = data else
+            {
+                print("dataTask error")
+                self.refreshing = false
+                return
+            }
             do {
+                print("dataTask no error")
                 if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>]
                 {
                     for i in jsonArray{
@@ -74,6 +90,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
                     print("bad json")
                 }
             } catch let error as NSError {
+                self.refreshing = false
                 print(error)
             }
             
@@ -81,10 +98,12 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
                 print("calling reload")
                 self.tableview.reloadData()
                 //self.setupTableView()
+                self.refreshing = false
             }
         }
+        print("calling resume1")
         task.resume()
-
+        print("called resume1")
     }
     
     func setupTableView() {
@@ -112,7 +131,6 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CoinTableCell
         cell.backgroundColor = UIColor.white
-        print("index=\(indexPath.row)")
         if (indexPath.row < coinsInWallet.count) {
             cell.coinImage.image = coinsInWallet[indexPath.row].photo
             //cell.coinImage.backgroundColor = .lightGray
@@ -149,16 +167,20 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         var msg:String = ""
         let dataTask = session.dataTask(with: request as URLRequest) { (data, response, error) -> Void in
             if error != nil {
+                print("dataTalk error")
                 msg = error!.localizedDescription
             }
             else {
+                print("dataTalk no error")
                 let jsonStr = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
                 print("Parsed JSON: '\(jsonStr ?? "none")'")
                 msg = "Sent to \(coin.owner)"
             }
             self.showAlert(msg: msg)
         }
+        print("calling resume")
         dataTask.resume()
+        print("called resume")
     }
 
     func showAlert(msg:String) {
@@ -208,6 +230,14 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     }
     //MARK: Private Methods
 
+    @objc func timerCallback()
+    {
+        print("timer ref=\(self.refreshing)")
+        if(self.refreshing == false) {
+            self.refreshTable()
+        }
+    }
+    
     private func loadSampleCoins() {
         let photo1 = UIImage(named: "D01")
         let photo2 = UIImage(named: "D02")
