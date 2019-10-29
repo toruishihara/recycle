@@ -22,8 +22,10 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        self.timer.invalidate()
-        self.timer = nil
+        if (self.timer != nil) {
+            self.timer.invalidate()
+            self.timer = nil
+        }
     }
 
     func draw() {
