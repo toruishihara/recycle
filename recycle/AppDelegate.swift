@@ -14,6 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var username: String?
+    var coinsInWallet = [CoinInWallet]()
+    var allCoins = [Coin]()
+    var ownCoins: Int = 0
+    var updating: Bool = false
+    var updated: Bool = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -42,6 +47,70 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func queryCoins() {
+        updating = true
+        let url = URL(string: "http://35.227.185.35:3000/api/com.alchemistmaterial.test.AlchemistCoin")!
+        print("Get all coins from server")
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            guard let data = data else
+            {
+                print("dataTask error")
+                self.updating = false
+                return
+            }
+            do {
+                print("dataTask no error")
+                var nCoins = 0
+                if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>]
+                {
+                    self.allCoins = [Coin]()
+                    for i in self.coinsInWallet {
+                        i.num = 0
+                    }
 
+                    for i in jsonArray{
+                        //print(i)
+                        let coin = Coin(json: i)
+                        self.allCoins += [coin!]
+                        let owner = i["owner"] as! String?
+                        if ((owner != nil) && owner!.hasSuffix(self.username!)) {
+                            nCoins = nCoins + 1
+                            let design = i["coinDesignId"] as! String?
+                            
+                            for j in self.coinsInWallet {
+                                if (design! == j.name) {
+                                    j.num += 1
+                                    print("design:\(j.name) num:\(j.num)")
+                                }
+                            }
+                        }
+                    }
+                    if (nCoins > 0 && nCoins != self.ownCoins) {
+                        self.ownCoins = nCoins
+                    }
+                    self.updated = true
+                    self.updating = false
+                } else {
+                    print("bad json")
+                }
+            } catch let error as NSError {
+                self.updated = false
+                self.updating = false
+                print(error)
+            }
+            
+            /*
+            DispatchQueue.main.async {
+                print("calling reload")
+                self.tableview.reloadData()
+                //self.setupTableView()
+                self.refreshing = false
+            }
+             */
+        }
+        print("calling resume1")
+        task.resume()
+        print("called resume1")
+    }
 }
 

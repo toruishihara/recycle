@@ -13,11 +13,12 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     //MARK: Properties
     var app: AppDelegate?
 
-    var coinsInWallet = [CoinInWallet]()
-    var coins = [Coin]()
+    //var coinsInWallet = [CoinInWallet]()
+    //var coins = [Coin]()
     
     var timer: Timer!
-    var refreshing: Bool = false
+    //var refreshing: Bool = false
+    var firstTime: Bool = true
     
     let tableview: UITableView = {
         let tv = UITableView()
@@ -34,12 +35,14 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
 
         loadSampleCoins()
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillApear")
-        refreshTable()
+        firstTime = true
+        if (app?.updating == false) {
+            app?.queryCoins()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -53,59 +56,12 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     }
     
     func refreshTable() {
-        refreshing = true
-        coins = [Coin]()
-        for i in coinsInWallet {
-            i.num = 0
+        DispatchQueue.main.async {
+            print("calling reload")
+            self.tableview.reloadData()
         }
-        let url = URL(string: "http://35.227.185.35:3000/api/com.alchemistmaterial.test.AlchemistCoin")!
-        print("Get all coins from server")
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            guard let data = data else
-            {
-                print("dataTask error")
-                self.refreshing = false
-                return
-            }
-            do {
-                print("dataTask no error")
-                if let jsonArray = try JSONSerialization.jsonObject(with: data, options : .allowFragments) as? [Dictionary<String,Any>]
-                {
-                    for i in jsonArray{
-                        //print(i)
-                        let coin = Coin(json: i)
-                        self.coins += [coin!]
-                        let owner = i["owner"] as! String?
-                        if ((owner != nil) && owner!.hasSuffix(self.app!.username!)) {
-                            let design = i["coinDesignId"] as! String?
-                            
-                            for j in self.coinsInWallet {
-                                if (design! == j.name) {
-                                    j.num += 1
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    print("bad json")
-                }
-            } catch let error as NSError {
-                self.refreshing = false
-                print(error)
-            }
-            
-            DispatchQueue.main.async {
-                print("calling reload")
-                self.tableview.reloadData()
-                //self.setupTableView()
-                self.refreshing = false
-            }
-        }
-        print("calling resume1")
-        task.resume()
-        print("called resume1")
     }
-    
+
     func setupTableView() {
         tableview.delegate = self
         tableview.dataSource = self
@@ -125,17 +81,18 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 1
         //print("numberOfRowsInSection")
-        return coinsInWallet.count
+        return app!.coinsInWallet.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CoinTableCell
         cell.backgroundColor = UIColor.white
-        if (indexPath.row < coinsInWallet.count) {
-            cell.coinImage.image = coinsInWallet[indexPath.row].photo
+        if (indexPath.row < app!.coinsInWallet.count) {
+            cell.coinImage.image = app!.coinsInWallet[indexPath.row].photo
             //cell.coinImage.backgroundColor = .lightGray
-            cell.coinLabel.text = String(format: "x %d", coinsInWallet[indexPath.row].num)
-            if (coinsInWallet[indexPath.row].num > 0) {
+            print("index:\(indexPath.row) num:\(app!.coinsInWallet[indexPath.row].num)" )
+            cell.coinLabel.text = String(format: "x %d", app!.coinsInWallet[indexPath.row].num)
+            if (app!.coinsInWallet[indexPath.row].num > 0) {
                 cell.coinLabel2.text = "Send"
                 cell.coinLabel2.backgroundColor = .lightGray
             } else {
@@ -214,7 +171,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         var coin:Coin?
         let designId:String = String(format: "D%02d", indexPath.row+1)
         
-        for i in coins {
+        for i in app!.allCoins {
             if (i.owner == app!.username && i.coinDesignId == designId) {
                 coin = i
                 break
@@ -232,10 +189,15 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
 
     @objc func timerCallback()
     {
-        print("timer ref=\(self.refreshing)")
-        if(self.refreshing == false) {
-            self.refreshTable()
+        print("timer updating=\(app!.updating) updated=\(app!.updated)")
+        if(app!.updating == false) {
+            app!.queryCoins()
         }
+        if (firstTime || app!.updated) {
+            self.refreshTable()
+            app!.updated = false
+        }
+        firstTime = false
     }
     
     private func loadSampleCoins() {
@@ -255,7 +217,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         let coin6 = CoinInWallet(name: "D06", photo: photo6, num: 0)
         let coin7 = CoinInWallet(name: "D07", photo: photo7, num: 0)
 
-        coinsInWallet += [coin1!, coin2!, coin3!, coin4!, coin5!, coin6!, coin7!]
+        app!.coinsInWallet += [coin1!, coin2!, coin3!, coin4!, coin5!, coin6!, coin7!]
     }
     
     func selectUserAndSend(coin: Coin) {

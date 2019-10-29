@@ -10,12 +10,22 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     var app: AppDelegate?
+    var timer: Timer!
+    var label4: UILabel?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         app = (UIApplication.shared.delegate as! AppDelegate)
         app!.username = UserDefaults.standard.string(forKey: "username")
+        app!.ownCoins = UserDefaults.standard.integer(forKey: "ownCoins")
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        self.timer.invalidate()
+        self.timer = nil
+    }
+
     func draw() {
         //self.view.backgroundColor = UIColor(patternImage: UIImage(named: "profile")!)
         let w = self.view.frame.width
@@ -125,13 +135,13 @@ class ProfileViewController: UIViewController {
         label3.text = "AMT balance"
         self.view.addSubview(label3)
 
-        let label4 = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: 51))
-        label4.center = CGPoint(x: w/2, y: h * circle_y)
-        label4.textAlignment = .center
-        label4.textColor = UIColor.black
-        label4.font = UIFont.boldSystemFont(ofSize: 50.0)
-        label4.text = "300"
-        self.view.addSubview(label4)
+        label4 = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: 51))
+        label4!.center = CGPoint(x: w/2, y: h * circle_y)
+        label4!.textAlignment = .center
+        label4!.textColor = UIColor.black
+        label4!.font = UIFont.boldSystemFont(ofSize: 50.0)
+        label4!.text = String(format: "%d", app!.ownCoins)
+        self.view.addSubview(label4!)
         
         let label5 = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: 21))
         label5.center = CGPoint(x: w/2, y: h * circle_y + 50)
@@ -140,8 +150,6 @@ class ProfileViewController: UIViewController {
         label5.font = UIFont.boldSystemFont(ofSize: 20.0)
         label5.text = "AMT"
         self.view.addSubview(label5)
-
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -152,6 +160,31 @@ class ProfileViewController: UIViewController {
             //showAlertWithTextField()
         } else {
             draw()
+        }
+    }
+    
+    func refresh() {
+        print("calling refresh new:\(self.app!.ownCoins) old:\(String(describing: self.label4!.text))")
+        let newText = String(format: "%d", self.app!.ownCoins)
+        if (self.label4!.text != newText) {
+            UserDefaults.standard.set(self.app!.ownCoins, forKey: "ownCoins")
+            DispatchQueue.main.async {
+                //self.label4!.removeFromSuperview()
+                //self.view.addSubview(self.label4!)
+                self.view.setNeedsDisplay()
+            }
+        }
+    }
+
+    @objc func timerCallback()
+    {
+        print("timer updating=\(app!.updating) updated=\(app!.updated)")
+        if(app!.updating == false) {
+            app!.queryCoins()
+        }
+        if (app!.updated) {
+            self.refresh()
+            app!.updated = false
         }
     }
     
