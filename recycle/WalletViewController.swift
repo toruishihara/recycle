@@ -176,6 +176,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         for i in app!.allCoins {
             if (i.owner == app!.username && i.coinDesignId == designId) {
                 coin = i
+                print(coin!)
                 break
             }
         }

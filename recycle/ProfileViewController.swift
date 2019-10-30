@@ -171,8 +171,7 @@ class ProfileViewController: UIViewController {
         if (self.label4!.text != newText) {
             UserDefaults.standard.set(self.app!.ownCoins, forKey: "ownCoins")
             DispatchQueue.main.async {
-                //self.label4!.removeFromSuperview()
-                //self.view.addSubview(self.label4!)
+                self.label4!.text = newText
                 self.view.setNeedsDisplay()
             }
         }
