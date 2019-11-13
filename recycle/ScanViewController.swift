@@ -17,6 +17,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     var shapeLayer1:CAShapeLayer!
     var timer: Timer!
     var coinNo: Int!
+    var url = URL(string: "https://www.coke.com")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,9 +61,14 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     }
     
     func startCaptureSession() {
-        coinNo = Int.random(in: 1..<8)
+        coinNo = Int.random(in: 1..<11)
+        if (coinNo > 7) {
+            coinNo = 3
+        }
         coinView = UIImageView(image: UIImage(named: String(format: "D%02d", coinNo)))
         coinView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(self.coinTouchAction))
+        self.view.addGestureRecognizer(gesture)
             
         view.layer.addSublayer(shapeLayer1)
         view.layer.addSublayer(previewLayer)
@@ -135,6 +141,12 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         dismiss(animated: true)
     }
 
+    @objc func coinTouchAction(sender : UITapGestureRecognizer) {
+        // Do what you want
+        print("touch")
+        UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+    }
+
     func found(code: String) {
         print(code)
         previewLayer.removeFromSuperlayer()
@@ -143,13 +155,26 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         if (coinNo == 5) {
             self.view.backgroundColor = UIColor(patternImage: UIImage(named: "firework")!)
         }
-
+        if (coinNo == 3) {
+            url = URL(string:"http://www.lovelive-anime.jp/otonokizaka/member/member03.html")
+        } else if (coinNo == 4) {
+            url = URL(string: "https://www.starbucks.com")
+        } else if (coinNo == 7) {
+            url = URL(string: "https://ja.wikipedia.org/wiki/黒田博樹")
+        } else {
+            url = URL(string: "https://www.coke.com")
+        }
         
         timer = Timer.scheduledTimer(timeInterval: 7.0, target: self, selector: #selector(nextScan), userInfo: nil, repeats: false)
 
         self.view.addSubview(self.coinView)
         self.coinView.center = self.view.center
-        UIView.animate(withDuration: 2.0, delay: 0.0, options: .autoreverse, animations: {
+
+        if (coinNo == 3) {
+            timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(nextAnimetion), userInfo: nil, repeats: false)
+        }
+
+        UIView.animate(withDuration: 2.0, delay: 0.0, options:[.repeat, .autoreverse], animations: {
             self.coinView.center.y += 200.0
         }, completion: nil)
     }
@@ -164,6 +189,11 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         startCaptureSession()
 
         print("nextScan end")
+    }
+    
+    @objc func nextAnimetion()
+    {
+        self.coinView.image = UIImage(named: "D03b")
     }
 
     override var prefersStatusBarHidden: Bool {

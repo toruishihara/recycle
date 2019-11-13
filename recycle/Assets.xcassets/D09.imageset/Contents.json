@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "a.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "coin3a.png",
       "scale" : "2x"
     },
     {
