@@ -61,12 +61,11 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     }
     
     func startCaptureSession() {
-        coinNo = Int.random(in: 1..<11)
-        if (coinNo > 7) {
-            coinNo = 3
-        }
+        coinNo = Int.random(in: 1..<8)
         coinView = UIImageView(image: UIImage(named: String(format: "D%02d", coinNo)))
-        coinView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+        coinView.contentMode = .scaleAspectFill
+        coinView.frame = CGRect(x: 0, y: 0, width: 220, height: 220)
+        
         let gesture = UITapGestureRecognizer(target: self, action:  #selector(self.coinTouchAction))
         self.view.addGestureRecognizer(gesture)
             
@@ -156,11 +155,11 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             self.view.backgroundColor = UIColor(patternImage: UIImage(named: "firework")!)
         }
         if (coinNo == 3) {
-            url = URL(string:"http://www.lovelive-anime.jp/otonokizaka/member/member03.html")
+            url = URL(string:"https://www.ac-illust.com")
         } else if (coinNo == 4) {
             url = URL(string: "https://www.starbucks.com")
         } else if (coinNo == 7) {
-            url = URL(string: "https://ja.wikipedia.org/wiki/黒田博樹")
+            url = URL(string: "https://www.alchemist-material.com")
         } else {
             url = URL(string: "https://www.coke.com")
         }
