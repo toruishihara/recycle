@@ -18,6 +18,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     var timer: Timer!
     var coinNo: Int!
     var url = URL(string: "https://www.coke.com")
+    var Count:Int = 1
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +62,11 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     }
     
     func startCaptureSession() {
-        coinNo = Int.random(in: 1..<8)
+        coinNo = Count//Int.random(in: 1..<8)
+        Count = Count + 1
+        if (Count >= 8) {
+            Count = 1
+        }
         coinView = UIImageView(image: UIImage(named: String(format: "D%02d", coinNo)))
         coinView.contentMode = .scaleAspectFill
         coinView.frame = CGRect(x: 0, y: 0, width: 220, height: 220)
@@ -158,8 +163,13 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             url = URL(string:"https://www.ac-illust.com")
         } else if (coinNo == 4) {
             url = URL(string: "https://www.starbucks.com")
+        } else if (coinNo == 5) {  // AKB
+            url = URL(string: "https://www.youtube.com/watch?v=0pKfxbCHLoU")
+       } else if (coinNo == 6) {
+           url = URL(string: "https://www.youtube.com/channel/UC6IMGCz0Pjwt2icerqPIuZg") // Oretachi channel
         } else if (coinNo == 7) {
-            url = URL(string: "https://www.alchemist-material.com")
+            //url = URL(string: "https://www.alchemist-material.com")
+            url = URL(string: "https://www.youtube.com/watch?v=GM3SIBr7NvI&t=34s") // hikakin
         } else {
             url = URL(string: "https://www.coke.com")
         }
