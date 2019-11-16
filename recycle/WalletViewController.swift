@@ -88,18 +88,20 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableview.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! CoinTableCell
+        cell.parent = self
         cell.backgroundColor = UIColor.white
+        cell.CoinNo = Int64(indexPath.row + 1)
         if (indexPath.row < app!.coinsInWallet.count) {
-            cell.coinImage.image = app!.coinsInWallet[indexPath.row].photo
+            cell.coinImage!.image = app!.coinsInWallet[indexPath.row].photo
             //cell.coinImage.backgroundColor = .lightGray
             print("index:\(indexPath.row) num:\(app!.coinsInWallet[indexPath.row].num)" )
-            cell.coinLabel.text = String(format: "x %d", app!.coinsInWallet[indexPath.row].num)
+            cell.coinLabel!.text = String(format: "x %d", app!.coinsInWallet[indexPath.row].num)
             if (app!.coinsInWallet[indexPath.row].num > 0) {
-                cell.coinLabel2.text = "Send"
-                cell.coinLabel2.backgroundColor = .lightGray
+                cell.button1!.isHidden = false
+                cell.button2!.isHidden = false
             } else {
-                cell.coinLabel2.text = ""
-                cell.coinLabel2.backgroundColor = .white
+                cell.button1!.isHidden = true
+                cell.button2!.isHidden = true
             }
         } else {
             print("No image, label")
@@ -110,6 +112,32 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
+    }
+
+    // MARK
+    public func SelectUserAndSend(coin: Coin) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Send to", message: "", preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "USER01", style: .default, handler: { (_) in
+                coin.owner = "USER01"
+                self.httpPut(coin:coin)
+            }))
+
+            alert.addAction(UIAlertAction(title: "USER02", style: .default, handler: { (_) in
+                print("USER02")
+                coin.owner = "USER02"
+                self.httpPut(coin:coin)
+            }))
+
+            alert.addAction(UIAlertAction(title: "USER03", style: .default, handler: { (_) in
+                coin.owner = "USER03"
+                self.httpPut(coin:coin)
+            }))
+        
+            self.present(alert, animated: true, completion: {
+                print("completion block")
+            })
+        }
     }
 
     func httpPut(coin:Coin) {
@@ -165,6 +193,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         }
     }
     
+    /*
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("section: \(indexPath.section)")
         //print("row: \(indexPath.row)")
@@ -188,6 +217,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         //httpPut(coin:coin!)
         return
     }
+ */
     //MARK: Private Methods
 
     @objc func timerCallback()
@@ -223,30 +253,5 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         app!.coinsInWallet += [coin1!, coin2!, coin3!, coin4!, coin5!, coin6!, coin7!]
     }
     
-    func selectUserAndSend(coin: Coin) {
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Send to", message: "", preferredStyle: .actionSheet)
-            alert.addAction(UIAlertAction(title: "USER01", style: .default, handler: { (_) in
-                coin.owner = "USER01"
-                self.httpPut(coin:coin)
-            }))
-
-            alert.addAction(UIAlertAction(title: "USER02", style: .default, handler: { (_) in
-                print("USER02")
-                coin.owner = "USER02"
-                self.httpPut(coin:coin)
-            }))
-
-            alert.addAction(UIAlertAction(title: "USER03", style: .default, handler: { (_) in
-                coin.owner = "USER03"
-                self.httpPut(coin:coin)
-            }))
-        
-            self.present(alert, animated: true, completion: {
-                print("completion block")
-            })
-        }
-
-    }
 
 }

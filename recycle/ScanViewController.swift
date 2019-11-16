@@ -159,7 +159,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         if (coinNo == 5) {
             self.view.backgroundColor = UIColor(patternImage: UIImage(named: "firework")!)
         }
-        if (coinNo == 3) {
+        if (coinNo == 2) {
+            url = URL(string: "https://www.alchemist-material.com")
+        } else if (coinNo == 3) {
             url = URL(string:"https://www.ac-illust.com")
         } else if (coinNo == 4) {
             url = URL(string: "https://www.starbucks.com")
@@ -168,7 +170,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
        } else if (coinNo == 6) {
            url = URL(string: "https://www.youtube.com/channel/UC6IMGCz0Pjwt2icerqPIuZg") // Oretachi channel
         } else if (coinNo == 7) {
-            //url = URL(string: "https://www.alchemist-material.com")
             url = URL(string: "https://www.youtube.com/watch?v=GM3SIBr7NvI&t=34s") // hikakin
         } else {
             url = URL(string: "https://www.coke.com")
