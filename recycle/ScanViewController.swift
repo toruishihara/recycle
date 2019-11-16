@@ -64,7 +64,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     func startCaptureSession() {
         coinNo = Count//Int.random(in: 1..<8)
         Count = Count + 1
-        if (Count >= 8) {
+        if (Count >= 9) {
             Count = 1
         }
         coinView = UIImageView(image: UIImage(named: String(format: "D%02d", coinNo)))

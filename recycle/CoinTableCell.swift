@@ -72,7 +72,7 @@ class CoinTableCell: UITableViewCell {
         if (self.CoinNo == 2) {
              url = URL(string: "https://www.alchemist-material.com")
         } else if (self.CoinNo == 3) {
-             url = URL(string:"https://www.ac-illust.com")
+             url = URL(string:"https://www.amazon.com/Love-Live-Sunshine-Seasons-Blu-ray/dp/B07T3NQ9S2/ref=sr_1_6?keywords=love+live&qid=1573942961&sr=8-6")
         } else if (self.CoinNo == 4) {
              url = URL(string: "https://www.starbucks.com")
         } else if (self.CoinNo == 5) {  // AKB
@@ -81,7 +81,10 @@ class CoinTableCell: UITableViewCell {
             url = URL(string: "https://www.youtube.com/channel/UC6IMGCz0Pjwt2icerqPIuZg") // Oretachi channel
         } else if (self.CoinNo == 7) {
              url = URL(string: "https://www.youtube.com/watch?v=GM3SIBr7NvI&t=34s") // hikakin
+        } else if (self.CoinNo == 8) {
+             url = URL(string: "https://www.kirin.co.jp/entertainment/cm/player.html?v=hkaG3zljDeY&list=PLA61bUUkTUteeJdBiOT1cWioUEi80T5MX")
         }
+
         UIApplication.shared.open(url!, options: [:], completionHandler: nil)
     }
 

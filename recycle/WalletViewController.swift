@@ -100,7 +100,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
                 cell.button1!.isHidden = false
                 cell.button2!.isHidden = false
             } else {
-                cell.button1!.isHidden = true
+                cell.button1!.isHidden = false
                 cell.button2!.isHidden = true
             }
         } else {
@@ -193,31 +193,6 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         }
     }
     
-    /*
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("section: \(indexPath.section)")
-        //print("row: \(indexPath.row)")
-        //let nextVC = ShopViewController()
-        //self.present(nextVC, animated: true, completion: nil)
-        var coin:Coin?
-        let designId:String = String(format: "D%02d", indexPath.row+1)
-        
-        for i in app!.allCoins {
-            if (i.owner == app!.username && i.coinDesignId == designId) {
-                coin = i
-                print(coin!)
-                break
-            }
-        }
-        if (coin == nil) {
-            print("No Coin Found")
-            return
-        }
-        selectUserAndSend(coin:coin!)
-        //httpPut(coin:coin!)
-        return
-    }
- */
     //MARK: Private Methods
 
     @objc func timerCallback()
@@ -241,6 +216,7 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         let photo5 = UIImage(named: "D05")
         let photo6 = UIImage(named: "D06")
         let photo7 = UIImage(named: "D07")
+        let photo8 = UIImage(named: "D08")
 
         let coin1 = CoinInWallet(name: "D01", photo: photo1, num: 0)
         let coin2 = CoinInWallet(name: "D02", photo: photo2, num: 0)
@@ -249,8 +225,9 @@ class WalletViewController: UIViewController, UITableViewDelegate,  UITableViewD
         let coin5 = CoinInWallet(name: "D05", photo: photo5, num: 0)
         let coin6 = CoinInWallet(name: "D06", photo: photo6, num: 0)
         let coin7 = CoinInWallet(name: "D07", photo: photo7, num: 0)
+        let coin8 = CoinInWallet(name: "D08", photo: photo8, num: 0)
 
-        app!.coinsInWallet += [coin1!, coin2!, coin3!, coin4!, coin5!, coin6!, coin7!]
+        app!.coinsInWallet += [coin1!, coin2!, coin3!, coin4!, coin5!, coin6!, coin7!, coin8!]
     }
     
 
